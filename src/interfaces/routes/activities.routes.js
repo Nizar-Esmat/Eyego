@@ -48,9 +48,4 @@ router.post('/activities', async function(req, res) {
     res.status(500).json({ error: error.message });
   }
 });
-
-router.get('/health', function(req, res) {
-  res.json({ status: 'ok' });
-});
-
 export default router;
