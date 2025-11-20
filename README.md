@@ -2,41 +2,37 @@
 
 Event-driven microservice using Node.js, Express, Kafka, and MongoDB for real-time user activity processing.
 
-## Project Structure (DDD Pattern)
+## Project Structure
 
 ```
 src/
-├── domain/                      # Domain Layer (Business Logic)
-│   └── entities/
-│       └── UserActivity.js      # User activity entity
-├── infrastructure/              # Infrastructure Layer (External Systems)
+├── infrastructure/              # External Systems (Database, Kafka)
 │   ├── database/
 │   │   ├── MongoDBConnection.js # MongoDB connection
 │   │   ├── UserActivitySchema.js # Mongoose schema
-│   │   └── UserActivityRepository.js # Repository implementation
+│   │   └── UserActivityRepository.js # Database operations
 │   └── kafka/
 │       ├── KafkaProducer.js     # Kafka producer
 │       └── KafkaConsumer.js     # Kafka consumer
-├── application/                 # Application Layer (Use Cases)
+├── application/                 # Business Logic
 │   ├── usecases/
-│   │   └── ActivityUseCases.js  # Activity business logic
+│   │   └── ActivityUseCases.js  # Activity operations
 │   └── services/
-│       └── EventProcessorService.js # Event processing service
-├── interfaces/                  # Interface Layer (API)
+│       └── EventProcessorService.js # Event processing
+├── interfaces/                  # API Routes
 │   └── routes/
-│       └── ActivityRoutes.js    # REST API routes
+│       └── activities.routes.js # REST endpoints
 └── index.js                     # Application entry point
 ```
 
 ## Features
 
-- **Domain-Driven Design (DDD)**: Organized in 4 layers (Domain, Infrastructure, Application, Interface)
 - **Kafka Producer**: Publishes user activity events
 - **Kafka Consumer**: Processes events and saves to MongoDB
 - **MongoDB**: Stores activities with indexes for performance
 - **REST API**: Fetch activities with pagination and filtering
 - **Docker**: Containerized deployment
-- **Simple Code**: Junior-friendly with basic classes and functions
+- **Simple Code**: Function-based, junior-friendly
 
 ## API Endpoints
 
@@ -102,19 +98,20 @@ docker logs eyego-app-1
 docker-compose down
 ```
 
-## How It Works (DDD Flow)
+## How It Works
 
 1. **POST /activities** → ActivityUseCases.publishActivity() → Kafka Producer
 2. **Kafka Consumer** → EventProcessorService.start() → Receives message
-3. **EventProcessor** → ActivityUseCases.saveActivity() → UserActivityRepository
-4. **Repository** → UserActivitySchema (Mongoose) → MongoDB
+3. **EventProcessor** → ActivityUseCases.saveActivity() → Repository
+4. **Repository** → MongoDB (via Mongoose)
 5. **GET /activities** → ActivityUseCases.getActivities() → Repository → MongoDB
 
-### DDD Layers:
-- **Domain**: UserActivity entity, Repository interface (business rules)
-- **Infrastructure**: Mongoose, Kafka implementations (external tools)
-- **Application**: Use cases, Event processor (orchestration)
-- **Interface**: REST API routes (user interaction)
+### Architecture:
+- **Routes**: Handle HTTP requests
+- **Use Cases**: Business logic (publish, save, get activities)
+- **Repository**: Database operations
+- **Kafka**: Event streaming
+- **MongoDB**: Data storage
 
 ## MongoDB Indexes
 
