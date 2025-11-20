@@ -4,7 +4,6 @@ import * as db from './infrastructure/database/MongoDBConnection.js';
 import * as kafkaProducer from './infrastructure/kafka/KafkaProducer.js';
 import * as kafkaConsumer from './infrastructure/kafka/KafkaConsumer.js';
 import * as eventProcessor from './application/services/EventProcessorService.js';
-import * as activityUseCases from './application/usecases/ActivityUseCases.js';
 import activityRoutes from './interfaces/routes/activities.routes.js';
 
 async function start() {
@@ -18,7 +17,6 @@ async function start() {
     
     const app = express();
     app.use(express.json());
-    app.locals.activityUseCases = activityUseCases;
     app.use('/api/v1', activityRoutes);
     
     const port = process.env.PORT || 3000;

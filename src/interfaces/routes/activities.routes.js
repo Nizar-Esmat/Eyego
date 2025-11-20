@@ -1,4 +1,5 @@
 import express from 'express';
+import * as activityUseCases from '../../application/usecases/ActivityUseCases.js';
 
 const router = express.Router();
   
@@ -11,7 +12,7 @@ router.get('/activities', async function(req, res) {
       eventType: req.query.eventType
     };
     
-    const result = await req.app.locals.activityUseCases.getActivities(filters, limit, offset);
+    const result = await activityUseCases.getActivities(filters, limit, offset);
     res.json({
       success: true,
       data: result.data,
@@ -28,7 +29,7 @@ router.get('/activities/user/:userId', async function(req, res) {
     const offset = parseInt(req.query.offset) || 0;
     const filters = { userId: req.params.userId };
     
-    const result = await req.app.locals.activityUseCases.getActivities(filters, limit, offset);
+    const result = await activityUseCases.getActivities(filters, limit, offset);
     res.json({
       success: true,
       data: result.data,
@@ -41,7 +42,7 @@ router.get('/activities/user/:userId', async function(req, res) {
 
 router.post('/activities', async function(req, res) {
   try {
-    await req.app.locals.activityUseCases.publishActivity(req.body);
+    await activityUseCases.publishActivity(req.body);
     res.status(201).json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
