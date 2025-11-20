@@ -1,0 +1,10 @@
+curl -X POST http://localhost:4000/api/v1/activities -H "Content-Type: application/json" -d '{"userId":"u1","eventType":"click","action":"tap"}'
+curl "<http://localhost:4000/api/v1/activities?limit=10>"
+
+
+
+curl -X POST <http://localhost:4000/api/v1/activities> -H "Content-Type: application/json" -d '{"userId":"user456","eventType":"click","action":"button_clicked"}'
+
+curl -X POST <http://localhost:4000/api/v1/activities> -H "Content-Type: application/json" -d '{"userId":"user123","eventType":"purchase","action":"order_placed"}'
+
+curl "<http://localhost:4000/api/v1/activities?limit=20>"

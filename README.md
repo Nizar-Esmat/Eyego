@@ -7,10 +7,8 @@ Event-driven microservice using Node.js, Express, Kafka, and MongoDB for real-ti
 ```
 src/
 ├── domain/                      # Domain Layer (Business Logic)
-│   ├── entities/
-│   │   └── UserActivity.js      # User activity entity
-│   └── repositories/
-│       └── IUserActivityRepository.js  # Repository interface
+│   └── entities/
+│       └── UserActivity.js      # User activity entity
 ├── infrastructure/              # Infrastructure Layer (External Systems)
 │   ├── database/
 │   │   ├── MongoDBConnection.js # MongoDB connection
