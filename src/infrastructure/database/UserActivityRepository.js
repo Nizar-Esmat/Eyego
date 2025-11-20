@@ -1,17 +1,8 @@
 import ActivityModel from './UserActivitySchema.js';
-import UserActivity from '../../domain/entities/UserActivity.js';
 
 async function save(activity) {
-  const data = {
-    userId: activity.userId,
-    eventType: activity.eventType,
-    action: activity.action,
-    metadata: activity.metadata,
-    timestamp: activity.timestamp
-  };
-  
-  const saved = await ActivityModel.create(data);
-  return new UserActivity(saved);
+  const saved = await ActivityModel.create(activity);
+  return saved;
 }
 
 async function findAll(filters, limit, offset) {
@@ -29,9 +20,7 @@ async function findAll(filters, limit, offset) {
     .skip(offset)
     .sort({ timestamp: -1 });
   
-  return results.map(function(doc) {
-    return new UserActivity(doc);
-  });
+  return results;
 }
 
 async function count(filters) {
