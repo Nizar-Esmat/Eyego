@@ -1,36 +1,25 @@
 import 'dotenv/config';
 import express from 'express';
-import MongoDBConnection from './infrastructure/database/MongoDBConnection.js';
-import UserActivityRepository from './infrastructure/database/UserActivityRepository.js';
-import KafkaProducer from './infrastructure/kafka/KafkaProducer.js';
-import KafkaConsumer from './infrastructure/kafka/KafkaConsumer.js';
-import ActivityUseCases from './application/usecases/ActivityUseCases.js';
-import EventProcessorService from './application/services/EventProcessorService.js';
-import createActivityRoutes from './interfaces/routes/ActivityRoutes.js';
+import * as db from './infrastructure/database/MongoDBConnection.js';
+import * as kafkaProducer from './infrastructure/kafka/KafkaProducer.js';
+import * as kafkaConsumer from './infrastructure/kafka/KafkaConsumer.js';
+import * as eventProcessor from './application/services/EventProcessorService.js';
+import * as activityUseCases from './application/usecases/ActivityUseCases.js';
+import activityRoutes from './interfaces/routes/activities.routes.js';
 
 async function start() {
   try {
     console.log('Starting app...');
     
-    const db = new MongoDBConnection();
     await db.connect();
-    
-    const repository = new UserActivityRepository();
-    
-    const kafkaProducer = new KafkaProducer();
     await kafkaProducer.connect();
-    
-    const kafkaConsumer = new KafkaConsumer();
     await kafkaConsumer.connect();
-    
-    const activityUseCases = new ActivityUseCases(repository, kafkaProducer);
-    
-    const eventProcessor = new EventProcessorService(kafkaConsumer, activityUseCases);
     await eventProcessor.start();
     
     const app = express();
     app.use(express.json());
-    app.use('/api/v1', createActivityRoutes(activityUseCases));
+    app.locals.activityUseCases = activityUseCases;
+    app.use('/api/v1', activityRoutes);
     
     const port = process.env.PORT || 3000;
     const server = app.listen(port, function() {

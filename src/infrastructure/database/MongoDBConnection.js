@@ -1,14 +1,12 @@
 import mongoose from 'mongoose';
 
-class MongoDBConnection {
-  async connect() {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('MongoDB connected');
-  }
-  
-  async disconnect() {
-    await mongoose.connection.close();
-  }
+async function connect() {
+  await mongoose.connect(process.env.MONGODB_URI);
+  console.log('MongoDB connected');
 }
 
-export default MongoDBConnection;
+async function disconnect() {
+  await mongoose.connection.close();
+}
+
+export { connect, disconnect };
